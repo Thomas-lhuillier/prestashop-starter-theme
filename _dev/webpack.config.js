@@ -22,67 +22,103 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  * International Registered Trademark & Property of PrestaShop SA
  */
-var webpack = require('webpack');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-var plugins = [];
+const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+
+const plugins = [];
+const minimizers = [];
 
 plugins.push(
-  new ExtractTextPlugin('../css/theme.css')
+  new MiniCssExtractPlugin({
+    filename: '../css/theme.css'
+  })
 );
 
-module.exports = [{
-  // JavaScript
-  entry: [
-    './js/theme.js',
-    './css/normalize.css',
-    './css/example.less',
-    './css/st/dev.styl',
-    './css/theme.scss'
-  ],
+let config = {
+  entry: ['./js/theme.js', './css/theme.scss'],
   output: {
-    path: '../assets/js',
+    path: path.resolve(__dirname, '../assets/js'),
     filename: 'theme.js'
   },
   module: {
-    loaders:  [{
-      test: /\.js$/,
-      exclude: /node_modules/,
-      loaders: ['babel-loader']
-    }, {
-      test: /\.scss$/,
-      loader: ExtractTextPlugin.extract(
-          "style",
-          "css-loader?sourceMap!postcss!sass-loader?sourceMap"
-      )
-    }, {
-      test: /\.styl$/,
-      loader: ExtractTextPlugin.extract(
-          "style",
-          "css-loader?sourceMap!postcss!stylus-loader?sourceMap"
-      )
-    }, {
-      test: /\.less$/,
-      loader: ExtractTextPlugin.extract(
-          "style",
-          "css-loader?sourceMap!postcss!less-loader?sourceMap"
-      )
-    }, {
-      test: /\.css$/,
-      loader: ExtractTextPlugin.extract(
-          'style',
-          'css-loader?sourceMap!postcss-loader'
-      )
-    }, {
-      test: /.(png|woff(2)?|eot|ttf|svg|jpg)(\?[a-z0-9=\.]+)?$/,
-      loader: 'file-loader?name=../css/[hash].[ext]'
-    }]
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env']
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(s)?css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader
+          },
+          {
+            loader: 'css-loader'
+          },
+          {
+            loader: 'postcss-loader'
+          },
+          {
+            loader: 'sass-loader'
+          }
+        ]
+      },
+      {
+        test: /.(svg|jpg|png|woff(2)?|eot|ttf)(\?[a-z0-9=\.]+)?$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '../img/[name]_[sha512:hash:base64:7].[ext]'
+            }
+          }
+        ]
+      }
+    ]
   },
   externals: {
     prestashop: 'prestashop'
   },
   plugins: plugins,
+  optimization: {
+    minimizer: minimizers
+  },
   resolve: {
-    extensions: ['', '.js', '.scss', '.styl', '.less', '.css']
+    extensions: ['.js', '.scss', '.css']
+  },
+  stats: {
+    children: false
   }
-}];
+};
+
+module.exports = (env, argv) => {
+  if (argv.mode === 'production') {
+    // Minimize output
+    config.optimization.minimizer.push(
+      new UglifyJsPlugin({
+        uglifyOptions: {
+          extractComments: /^\**!|@preserve|@license|@cc_on/i,
+          compress: {
+            drop_console: true
+          }
+        },
+        parallel: true
+      })
+    );
+
+    // Show more infos in console
+    config.stats.children = true;
+  }
+
+  return config;
+};

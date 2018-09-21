@@ -1,5 +1,6 @@
 $body-background-color: #fefefe;
 
 body {
-  background: $body-background-color;
+  background-color: $body-background-color;
+  background-image: url('../img/logo.png') no-repeat;
 }
