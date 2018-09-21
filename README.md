@@ -1,6 +1,8 @@
-# PrestaShop Starter Theme
+_Forked from [PrestaShop/StarterTheme](https://github.com/PrestaShop/StarterTheme)_
 
-[![Build Status](https://travis-ci.org/PrestaShop/StarterTheme.svg?branch=master)](https://travis-ci.org/PrestaShop/StarterTheme)
+ A revisited (opinionated) Prestashop Starter theme, with Webpack 4, full ES6 and scss tool stack, optimized production mode and more.
+
+# Revamped Starter Theme
 
 [Starter Theme](http://build.prestashop.com/news/starter-theme-kickoff/) is a tool for designer to work efficiently,
 it includes only what is mandatory:
@@ -67,66 +69,3 @@ $ npm run watch
 ```
 
 Note: You should probably **start by removing all existing styles**.
-
-## Theme architecture
-
-Themes architecture has changed a lot since PrestaShop 1.7.
-
-```
-.
-├── assets
-│   ├── css/
-│   ├── img/
-│   └── js/
-├── config/
-│   ├── theme.dist.yml
-│   └── theme.yml
-├── CONTRIBUTING.md
-├── _dev/
-│   ├── css/
-│   ├── js/
-│   ├── package.json
-│   └── webpack.config.js
-├── modules/
-├── plugins/
-├── preview.png
-├── README.md
-└── templates/
-    ├── catalog/
-    ├── checkout/
-    ├── cms/
-    ├── contact.tpl
-    ├── customer/
-    ├── errors/
-    ├── index.tpl
-    ├── layouts/
-    ├── page.tpl
-    ├── _partials/
-    └── wrapper.tpl
-```
-
-| Folder | Description |
-|-------:|------------|
-| `assets` | Contains all "UI" data of your theme: javascripts, stylesheets and images; |
-| `config` | Contains the configuration file of your theme; |
-| `_dev` | Contains all the development assets; |
-| `modules` | Allow you to override templates for modules, take a look at `classic` | theme; |
-| `plugins` | Contains the Smarty extensions required by the theme, if any; |
-| `templates` | Contains the templates of the theme, ordered by domain categories |
-| `preview.png` | Should be a thumbnail of your theme homepage, displayed in the back office |
-
-## Update Workflow
-
-### Understanding the branches
-
-The StarterTheme's branches follow the PrestaShop's branches. That means that if you want to create a theme for PrestaShop `1.7.0.x` version, choose the latest release for this minor version (or use the `1.7.0.x` branches).
-
-### Update
-
-Every Prestashop release will be attached to a PrestaShop version and we will provide explicit changelogs with new features, fixes and impacted files to help you keep your theme up to date with the lastest improvements.
-
-Since your theme will live its own life, you cannot just cherry-pick a commit. You will have to understand it and decide if that applies to your theme or not.
-
-## Contributing
-
-Take a look at our [Contributing guide](CONTRIBUTING.md)
