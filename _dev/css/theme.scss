@@ -1,6 +1,11 @@
 $body-background-color: #fefefe;
 
+@font-face {
+  font-family: myFirstFont;
+  src: url(../fonts/dummy-font.eot);
+}
+
 body {
   background-color: $body-background-color;
-  background-image: url('../img/logo.png') no-repeat;
+  background-image: url(../img/logo.png) no-repeat;
 }

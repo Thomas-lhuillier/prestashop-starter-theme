@@ -74,12 +74,23 @@ let config = {
         ]
       },
       {
-        test: /.(svg|jpg|png|woff(2)?|eot|ttf)(\?[a-z0-9=\.]+)?$/,
+        test: /.(svg|jpg|png)(\?[a-z0-9=\.]+)?$/,
         use: [
           {
             loader: 'file-loader',
             options: {
               name: '../img/[name]_[sha512:hash:base64:7].[ext]'
+            }
+          }
+        ]
+      },
+      {
+        test: /.(woff(2)?|eot|ttf)(\?[a-z0-9=\.]+)?$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '../fonts/[name].[ext]'
             }
           }
         ]
