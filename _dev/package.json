@@ -1,8 +1,8 @@
 {
-  "name": "tot-starter-theme",
+  "name": "prestashop-starter-theme",
   "version": "1.0.0",
-  "description": "202 starter theme",
-  "main": "index.js",
+  "description": "Revisited Prestashop 1.7 Starter theme, with Webpack 4, full ES6 and scss tool stack, optimized production mode and more.",
+  "main": "./js/theme.js",
   "scripts": {
     "build": "webpack --mode production --colors --progress -p",
     "watch": "webpack --mode development --colors --devtool source-map --hide-modules -w",
