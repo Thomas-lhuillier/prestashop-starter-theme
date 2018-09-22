@@ -4,7 +4,8 @@
 
 body {
   background-color: #fefefe;
-  font-family: 'Dummy Font'; }
+  font-family: 'Dummy Font';
+  font-size: 16px; }
 
 .gradient {
   background-image: url(../img/generated/gradient_26Ko_3Jt7iJu.jpg) no-repeat; }
