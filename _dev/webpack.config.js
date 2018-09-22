@@ -24,17 +24,21 @@
  */
 
 const path = require('path');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
-const plugins = [];
 const minimizers = [];
-
-plugins.push(
+const plugins = [
   new MiniCssExtractPlugin({
     filename: '../css/theme.css'
+  }),
+  // Clear the assets/img/generated folder before each compilation.
+  new CleanWebpackPlugin(['assets/img/generated'], {
+    root: path.resolve(__dirname, '..'),
+    verbose: true
   })
-);
+];
 
 let config = {
   entry: ['./js/theme.js', './css/theme.scss'],
@@ -74,17 +78,22 @@ let config = {
         ]
       },
       {
+        // Include small images as base64 (< 8192 bytes),
+        // else extract in /assets/img/generated/
         test: /.(svg|jpg|png)(\?[a-z0-9=\.]+)?$/,
         use: [
           {
-            loader: 'file-loader',
+            loader: 'url-loader',
             options: {
-              name: '../img/[name]_[sha512:hash:base64:7].[ext]'
+              limit: 8192,
+              fallback: 'file-loader',
+              name: '../img/generated/[name]_[sha512:hash:base64:7].[ext]'
             }
           }
         ]
       },
       {
+        // Extract fonts in /assets/fonts/
         test: /.(woff(2)?|eot|ttf)(\?[a-z0-9=\.]+)?$/,
         use: [
           {
@@ -114,8 +123,11 @@ let config = {
 
 module.exports = (env, argv) => {
   if (argv.mode === 'production') {
-    // Minimize output
+    /**
+     * Production specific settings
+     */
     config.optimization.minimizer.push(
+      // Minimize output
       new UglifyJsPlugin({
         uglifyOptions: {
           extractComments: /^\**!|@preserve|@license|@cc_on/i,
@@ -127,7 +139,7 @@ module.exports = (env, argv) => {
       })
     );
 
-    // Show more infos in console
+    // Display more infos in console
     config.stats.children = true;
   }
 
